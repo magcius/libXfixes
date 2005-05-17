@@ -45,51 +45,16 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Check for X
-PKG_CHECK_MODULES(X, x11, 
-		  [x_found_with_pkgconfig=yes],
-		  [x_found_with_pkgconfig=no])
+PKG_CHECK_MODULES(X, x11)
+
 AC_SUBST(X_CFLAGS)
 AC_SUBST(X_LIBS)
 		  
-if test "$x_found_with_pkgconfig" = "no"
-then
-	AC_PATH_XTRA
-	X_LIBS="$X_LIBS -lX11"
-
-	if test "x$no_x" = "xyes"
-	then
-	        AC_MSG_ERROR([X is required, but it was either disabled or not found.])
-	fi
-
-	save_LIBS="$LIBS"
-	save_CFLAGS="$CFLAGS"
-	CFLAGS="$CFLAGS $X_CFLAGS"
-	LIBS="$LIBS $X_LIBS"
-
-	AC_MSG_CHECKING([for XTHREADS in Xlib])
-	AC_RUN_IFELSE(
-	   [AC_LANG_PROGRAM([[#include <X11/Xlib.h>]],
-			    [[return XInitThreads() == 0 ? 0 : 1;]])],
-	   [xthreads=no],
-	   [xthreads=yes],
-	   [xthreads=yes])
-	   
-	AC_MSG_RESULT($xthreads)
-	
-	LIBS="$save_LIBS"
-	CFLAGS="$save_CFLAGS"
-	
-	if test "x$xthreads" = "xyes"
-	then
-	        X_CFLAGS="$X_CFLAGS -DXTHREADS"
-	fi
-fi
-
 # Check fixesext configuration, strip extra digits from package version to
 # find the required protocol version
 
 FIXESEXT_VERSION=[`echo $VERSION | sed 's/^\([0-9][0-9]*\.[0-9][0-9]*\).*$/\1/'`]
-PKG_CHECK_MODULES(FIXESEXT, [fixesext >= $FIXESEXT_VERSION])
+PKG_CHECK_MODULES(FIXESEXT, [fixesproto >= $FIXESEXT_VERSION])
 AC_SUBST(FIXESEXT_CFLAGS)
 AC_SUBST(FIXESEXT_LIBS)
 
