@@ -9,6 +9,7 @@ libXfixes_la_SOURCES = 	\
 	Xfixesint.h
 
 libXfixes_la_LIBADD = @X_LIBS@
+libXfixes_la_CFLAGS = @X_CFLAGS@
 
 INCLUDES = -I$(top_srcdir)/include/X11/extensions
 
