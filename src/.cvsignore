@@ -1,0 +1,6 @@
+.deps
+.libs
+libXfixes.la
+*.lo
+Makefile
+Makefile.in
