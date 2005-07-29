@@ -34,7 +34,7 @@ dnl protocol, so Xfixes version l.n.m corresponds to protocol version l.n,
 dnl that 'revision' number appears in Xfixes.h and has to be manually
 dnl synchronized.
 dnl
-AC_INIT(libXfixes, 3.0.0, [keithp@keithp.com], libXfixes)
+AC_INIT(libXfixes, 3.0.0, [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg], libXfixes)
 AM_INIT_AUTOMAKE([dist-bzip2])
 AM_MAINTAINER_MODE
 
@@ -57,6 +57,8 @@ FIXESEXT_VERSION=[`echo $VERSION | sed 's/^\([0-9][0-9]*\.[0-9][0-9]*\).*$/\1/'`
 PKG_CHECK_MODULES(FIXESEXT, [fixesproto >= $FIXESEXT_VERSION])
 AC_SUBST(FIXESEXT_CFLAGS)
 AC_SUBST(FIXESEXT_LIBS)
+
+XORG_RELEASE_VERSION
 
 AC_OUTPUT([Makefile
 	   src/Makefile
