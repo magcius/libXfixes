@@ -1,3 +1,9 @@
+2005-11-01  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+
+	* configure.ac:
+	* src/Makefile.am:
+	Update pkgcheck dependencies to work with separate build roots.
+
 2005-10-26  Adam Jackson  <ajax@freedesktop.org>
 
 	* configure.ac:

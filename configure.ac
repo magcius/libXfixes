@@ -54,7 +54,7 @@ AC_SUBST(X_LIBS)
 # find the required protocol version
 
 FIXESEXT_VERSION=[`echo $VERSION | sed 's/^\([0-9][0-9]*\.[0-9][0-9]*\).*$/\1/'`]
-PKG_CHECK_MODULES(FIXESEXT, xproto [fixesproto >= $FIXESEXT_VERSION])
+PKG_CHECK_MODULES(FIXESEXT, xproto [fixesproto >= $FIXESEXT_VERSION] xextproto)
 AC_SUBST(FIXESEXT_CFLAGS)
 AC_SUBST(FIXESEXT_LIBS)
 
