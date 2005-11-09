@@ -33,7 +33,7 @@
  * This revision number also appears in configure.ac, they have
  * to be manually synchronized
  */
-#define XFIXES_REVISION	0
+#define XFIXES_REVISION	1
 #define XFIXES_VERSION	((XFIXES_MAJOR * 10000) + (XFIXES_MINOR * 100) + (XFIXES_REVISION))
 
 typedef struct {
