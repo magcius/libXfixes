@@ -6,5 +6,7 @@ includedir=@includedir@
 Name: Xfixes
 Description: X Fixes  Library
 Version: @PACKAGE_VERSION@
-Cflags: -I${includedir} @X_CFLAGS@
-Libs: -L${libdir} -lXfixes @X_LIBS@
+Requires: xproto fixesproto >= @FIXESEXT_VERSION@
+Requires.private: x11
+Cflags: -I${includedir}
+Libs: -L${libdir} -lXfixes
