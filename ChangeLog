@@ -1,3 +1,8 @@
+2006-05-12  Adam Jackson  <ajax@freedesktop.org>
+
+	* src/Makefile.am:
+	Fix the soversion to 3.1.0.
+
 2006-04-11  Adam Jackson  <ajax@freedesktop.org>
 
 	Bump to 4.0 for release.
