@@ -4,3 +4,4 @@ libXfixes.la
 *.lo
 Makefile
 Makefile.in
+*~
