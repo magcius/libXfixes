@@ -36,29 +36,29 @@ AC_INIT(libXfixes, 4.0.3, [https://bugs.freedesktop.org/enter_bug.cgi?product=xo
 AM_INIT_AUTOMAKE([dist-bzip2])
 AM_MAINTAINER_MODE
 
+# Require xorg-macros: XORG_CWARNFLAGS, XORG_CHANGELOG
+m4_ifndef([XORG_MACROS_VERSION], [AC_FATAL([must install xorg-macros 1.2 or later before running autoconf/autogen])])
+XORG_MACROS_VERSION(1.2)
 AM_CONFIG_HEADER(config.h)
 
 # Check for progs
 AC_PROG_CC
 AC_PROG_LIBTOOL
-
-# Check for X
-PKG_CHECK_MODULES(X, x11)
-
-AC_SUBST(X_CFLAGS)
-AC_SUBST(X_LIBS)
+XORG_CWARNFLAGS
 		  
 # Check fixesext configuration, strip extra digits from package version to
 # find the required protocol version
 
 FIXESEXT_VERSION=[`echo $VERSION | sed 's/^\([0-9][0-9]*\.[0-9][0-9]*\).*$/\1/'`]
 AC_SUBST(FIXESEXT_VERSION)
-PKG_CHECK_MODULES(FIXESEXT, xproto [fixesproto >= $FIXESEXT_VERSION] xextproto)
+PKG_CHECK_MODULES(FIXESEXT, xproto [fixesproto >= $FIXESEXT_VERSION] xextproto x11)
+FIXESEXT_CFLAGS="$CWARNFLAGS $FIXESEXT_CFLAGS"
 AC_SUBST(FIXESEXT_CFLAGS)
 AC_SUBST(FIXESEXT_LIBS)
 
 XORG_MANPAGE_SECTIONS
 XORG_RELEASE_VERSION
+XORG_CHANGELOG
 
 AC_OUTPUT([Makefile
 	   src/Makefile
