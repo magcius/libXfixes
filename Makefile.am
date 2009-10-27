@@ -24,8 +24,7 @@ SUBDIRS = src man
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = xfixes.pc
 
-EXTRA_DIST = xfixes.pc.in ChangeLog
-MAINTAINERCLEANFILES = ChangeLog
+EXTRA_DIST = xfixes.pc.in 
 
 .PHONY: ChangeLog
 
