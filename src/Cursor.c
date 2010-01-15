@@ -1,5 +1,4 @@
 /*
- * $XFree86: xc/lib/Xfixes/Cursor.c,v 1.1 2002/11/30 06:21:44 keithp Exp $
  *
  * Copyright © 2006 Sun Microsystems
  *
