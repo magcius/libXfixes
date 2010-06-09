@@ -31,15 +31,7 @@ EXTRA_DIST = $(libman_PRE)
 
 CLEANFILES = $(libman_DATA)
 
-SED = sed
-
-# Strings to replace in man pages
-XORGRELSTRING = @PACKAGE_STRING@
-  XORGMANNAME = X Version 11
-
-MAN_SUBSTS = \
-	-e 's/__vendorversion__/"$(XORGRELSTRING)" "$(XORGMANNAME)"/' \
-	-e 's/__libmansuffix__/$(LIB_MAN_SUFFIX)/g' 
+# String replacements for man pages now come from xorg-macros.m4 via configure
 
 SUFFIXES = .$(LIB_MAN_SUFFIX) .man
 

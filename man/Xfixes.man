@@ -25,7 +25,7 @@
 .ns
 .TP \\$1
 ..
-.TH XFIXES 3 "Version 1.0" "XFree86"
+.TH XFIXES __libmansuffix__ __xorgversion__
 
 .SH NAME
 XFixes \- Augmented versions of core protocol requests
