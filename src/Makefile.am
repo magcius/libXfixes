@@ -16,5 +16,5 @@ INCLUDES = -I$(top_srcdir)/include/X11/extensions
 libXfixes_la_LDFLAGS = -version-number 3:1:0 -no-undefined
 
 libXfixesincludedir = $(includedir)/X11/extensions
-libXfixesinclude_HEADERS = $(top_srcdir)/include/X11/extensions/Xfixes.h 
+libXfixesinclude_HEADERS = $(top_srcdir)/include/X11/extensions/Xfixes.h
 

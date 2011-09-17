@@ -303,8 +303,8 @@ XFixesFetchRegion (Display *dpy, XserverRegion region, int *nrectanglesRet)
 }
 
 XRectangle *
-XFixesFetchRegionAndBounds (Display	    *dpy, 
-			    XserverRegion   region, 
+XFixesFetchRegionAndBounds (Display	    *dpy,
+			    XserverRegion   region,
 			    int		    *nrectanglesRet,
 			    XRectangle	    *bounds)
 {
@@ -357,7 +357,7 @@ XFixesFetchRegionAndBounds (Display	    *dpy,
 }
 
 void
-XFixesSetGCClipRegion (Display *dpy, GC gc, 
+XFixesSetGCClipRegion (Display *dpy, GC gc,
 		       int clip_x_origin, int clip_y_origin,
 		       XserverRegion region)
 {
