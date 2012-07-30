@@ -24,6 +24,7 @@
 #ifndef _XFIXESINT_H_
 #define _XFIXESINT_H_
 
+#include <stdint.h>
 #include <stdio.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>

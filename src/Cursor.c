@@ -317,6 +317,28 @@ XFixesCreatePointerBarrier(Display *dpy, Window w, int x1, int y1,
 }
 
 void
+XFixesSelectBarrierInput (Display *dpy,
+                          PointerBarrier barrier,
+                          Window window,
+                          unsigned long eventMask)
+{
+    XFixesExtDisplayInfo	    *info = XFixesFindDisplay (dpy);
+    xXFixesSelectBarrierInputReq    *req;
+
+    XFixesSimpleCheckExtension (dpy, info);
+
+    LockDisplay (dpy);
+    GetReq (XFixesSelectBarrierInput, req);
+    req->reqType = info->codes->major_opcode;
+    req->xfixesReqType = X_XFixesSelectBarrierInput;
+    req->barrier = barrier;
+    req->window = window;
+    req->eventMask = eventMask;
+    UnlockDisplay (dpy);
+    SyncHandle ();
+}
+
+void
 XFixesDestroyPointerBarrier(Display *dpy, PointerBarrier b)
 {
     XFixesExtDisplayInfo *info = XFixesFindDisplay (dpy);

@@ -264,6 +264,39 @@ XFixesDestroyPointerBarrier(Display *dpy, PointerBarrier b);
 
 #endif /* XFIXES_MAJOR >= 5 */
 
+#if XFIXES_MAJOR >= 6
+
+typedef int32_t BarrierEventID;
+
+typedef struct {
+    int type;
+    unsigned long serial;
+    Bool send_event;
+    Display *display;
+    int extension;    /* XI extension offset */
+    int evtype;
+    Window window;
+    int x;
+    int y;
+    double dx;
+    double dy;
+    double raw_dx;
+    double raw_dy;
+    int dt;
+    PointerBarrier barrier;
+    BarrierEventID event_id;
+    int event_type;
+    Time timestamp;
+} XFixesBarrierNotifyEvent;
+
+void
+XFixesSelectBarrierInput(Display *dpy,
+                         PointerBarrier barrier,
+                         Window window,
+                         unsigned long eventMask);
+
+#endif /* XFIXES_MAJOR >= 6 */
+
 _XFUNCPROTOEND
 
 #endif /* _XFIXES_H_ */

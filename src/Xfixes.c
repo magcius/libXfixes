@@ -26,6 +26,9 @@
 #endif
 #include "Xfixesint.h"
 
+#define ENQUEUE_EVENT	True
+#define DONT_ENQUEUE	False
+
 XFixesExtInfo XFixesExtensionInfo;
 char XFixesExtensionName[] = XFIXES_NAME;
 
@@ -37,6 +40,18 @@ XFixesWireToEvent(Display *dpy, XEvent *event, xEvent *wire);
 
 static Status
 XFixesEventToWire(Display *dpy, XEvent *event, xEvent *wire);
+
+static Bool
+XFixesWireToCookie(Display *dpy, XGenericEventCookie *cookie, xEvent *wire);
+
+static Bool
+XFixesCopyCookie(Display *dpy, XGenericEventCookie *in, XGenericEventCookie *out);
+
+static Bool
+wireToBarrierEvent(xXFixesBarrierNotifyEvent *in, XGenericEventCookie *out);
+
+static Bool
+copyBarrierEvent(XGenericEventCookie *in, XGenericEventCookie *out);
 
 /*
  * XFixesExtAddDisplay - add a display to this extension. (Replaces
@@ -72,6 +87,10 @@ XFixesExtAddDisplay (XFixesExtInfo *extinfo,
 	    XESetWireToEvent (dpy, ev, XFixesWireToEvent);
 	    XESetEventToWire (dpy, ev, XFixesEventToWire);
 	}
+
+        XESetWireToEventCookie(dpy, info->codes->major_opcode, XFixesWireToCookie);
+        XESetCopyEventCookie(dpy, info->codes->major_opcode, XFixesCopyCookie);
+
 	/*
 	 * Get the version info
 	 */
@@ -255,6 +274,117 @@ XFixesWireToEvent(Display *dpy, XEvent *event, xEvent *wire)
     }
     }
     return False;
+}
+
+static Bool
+XFixesWireToCookie(Display *dpy, XGenericEventCookie *cookie, xEvent *event)
+{
+    XFixesExtDisplayInfo *info = XFixesFindDisplay(dpy);
+    xGenericEvent* ge = (xGenericEvent*)event;
+
+    if (ge->extension != info->codes->major_opcode) {
+        printf("XFixesWireToCookie: wrong extension opcode %d\n",
+               ge->extension);
+        return DONT_ENQUEUE;
+    }
+
+    cookie->type = event->u.u.type;
+    cookie->serial = _XSetLastRequestRead(dpy, (xGenericReply *) event);
+    cookie->display = dpy;
+    cookie->send_event = ((event->u.u.type & 0x80) != 0);
+    cookie->evtype = ge->evtype;
+    cookie->extension = ge->extension;
+
+    switch (ge->evtype)
+    {
+    case XFixesBarrierNotify: {
+        if (!wireToBarrierEvent((xXFixesBarrierNotifyEvent*)event, cookie)) {
+            printf("XFixesWireToCookie: CONVERSION FAILURE!  evtype=%d\n",
+                   ge->evtype);
+            break;
+        }
+        return ENQUEUE_EVENT;
+    }
+    default:
+        printf("XFixesWireToCookie: Unknown generic event. type %d\n", ge->evtype);
+    }
+    return DONT_ENQUEUE;
+}
+
+static Bool
+XFixesCopyCookie(Display *dpy, XGenericEventCookie *in, XGenericEventCookie *out)
+{
+    int ret = True;
+    XFixesExtDisplayInfo *info = XFixesFindDisplay(dpy);
+
+    if (in->extension != info->codes->major_opcode) {
+        printf("XFixesCopyCookie: wrong extension opcode %d\n",
+                in->extension);
+        return False;
+    }
+
+    *out = *in;
+    out->data = NULL;
+    out->cookie = 0;
+
+    switch(in->evtype) {
+    case XFixesBarrierNotify:
+        ret = copyBarrierEvent(in, out);
+        break;
+    default:
+        printf("XFixesWireToCookie: Unknown generic event. type %d\n", in->evtype);
+        ret = False;
+    }
+
+    if (!ret)
+        printf("XFixesCopyCookie: Failed to copy evtype %d", in->evtype);
+    return ret;
+}
+
+#define FP3232_TO_DOUBLE(x) ((double) (x).integral + (x).frac / (1 << 16) / (1 << 16))
+
+static Bool
+wireToBarrierEvent(xXFixesBarrierNotifyEvent *in, XGenericEventCookie *cookie)
+{
+    XFixesBarrierNotifyEvent *out;
+
+    out = cookie->data = calloc(1, sizeof(XFixesBarrierNotifyEvent));
+
+    out->display = cookie->display;
+    out->type = in->type;
+    out->extension = in->extension;
+    out->evtype = in->evtype;
+
+    out->x = in->x;
+    out->y = in->y;
+
+    out->dx = FP3232_TO_DOUBLE (in->dx);
+    out->dy = FP3232_TO_DOUBLE (in->dy);
+    out->raw_dx = FP3232_TO_DOUBLE (in->raw_dx);
+    out->raw_dy = FP3232_TO_DOUBLE (in->raw_dy);
+    out->dt = in->dt;
+    out->barrier = in->barrier;
+    out->event_id = in->event_id;
+    out->event_type = in->event_type;
+    out->timestamp = in->timestamp;
+
+    return True;
+}
+
+static Bool
+copyBarrierEvent(XGenericEventCookie *in_cookie,
+                 XGenericEventCookie *out_cookie)
+{
+    XFixesBarrierNotifyEvent *in, *out;
+
+    in = in_cookie->data;
+
+    out = out_cookie->data = calloc(1, sizeof(XFixesBarrierNotifyEvent));
+    if (!out)
+        return False;
+    *out = *in;
+
+    return True;
 }
 
 static Status
